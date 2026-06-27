@@ -6,6 +6,13 @@ O sistema realiza os cálculos considerando a carga tributária do **Simples Nac
 
 ---
 
+## 🔗 Link do Projeto
+
+Acesse e utilize a ferramenta homologada em produção diretamente pelo link abaixo:
+👉 **[Acessar o Gestor de Precificação Têxtil](https://marketplace-management-iota.vercel.app/)**
+
+---
+
 ## 🚀 Funcionalidades Principais
 
 O painel é dividido em duas soluções práticas:
