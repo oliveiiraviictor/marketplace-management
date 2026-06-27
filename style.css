@@ -1,0 +1,246 @@
+:root {
+    --bg-principal: #f4f6f9;
+    --bg-card: #ffffff;
+    --texto-principal: #2d3748;
+    --texto-secundario: #718096;
+    --cor-primaria: #4f46e5;
+    --cor-primaria-hover: #4338ca;
+    --sucesso: #10b981;
+    --borda: #e2e8f0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: var(--bg-principal);
+    color: var(--texto-principal);
+    padding: 12px;
+    font-size: 15px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin: 15px 0 25px 0;
+}
+
+header h1 {
+    color: var(--cor-primaria);
+    font-size: 1.6rem;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+header p {
+    font-size: 0.9rem;
+}
+
+.abas {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--borda);
+    padding-bottom: 8px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+}
+
+.aba-btn {
+    background: none;
+    border: none;
+    padding: 10px 16px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--texto-secundario);
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.aba-btn.ativa {
+    background-color: var(--cor-primaria);
+    color: white;
+}
+
+.tela {
+    display: none;
+}
+
+.tela.ativa {
+    display: block;
+}
+
+.card {
+    background: var(--bg-card);
+    border-radius: 10px;
+    padding: 18px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--borda);
+    margin-bottom: 20px;
+}
+
+.card h2 {
+    font-size: 1.15rem;
+    margin-bottom: 15px;
+    color: var(--texto-principal);
+    border-left: 4px solid var(--cor-primaria);
+    padding-left: 10px;
+}
+
+.grupo-campo {
+    margin-bottom: 16px;
+}
+
+label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--texto-principal);
+}
+
+input,
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--texto-principal);
+    outline: none;
+    background-color: #f8fafc;
+    transition: border 0.2s;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--cor-primaria);
+    background-color: #fff;
+}
+
+.grupo-radio {
+    display: flex;
+    gap: 15px;
+    margin-top: 8px;
+    background: #f1f5f9;
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+.grupo-radio label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    margin-bottom: 0;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.grupo-radio input {
+    width: 18px;
+    height: 18px;
+}
+
+button.btn-calcular {
+    width: 100%;
+    background-color: var(--cor-primaria);
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: background 0.2s;
+    box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+}
+
+button.btn-calcular:hover {
+    background-color: var(--cor-primaria-hover);
+}
+
+.resultado-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--borda);
+    font-size: 0.95rem;
+}
+
+.resultado-item:last-child {
+    border-bottom: none;
+}
+
+.destaque {
+    font-size: 1.35rem;
+    font-weight: bold;
+    color: var(--sucesso);
+}
+
+.alerta-taxa {
+    background-color: #eff6ff;
+    border-left: 4px solid #3b82f6;
+    padding: 10px;
+    font-size: 0.8rem;
+    color: #1e40af;
+    border-radius: 4px;
+    margin-top: 8px;
+    line-height: 1.4;
+}
+
+@media (min-width: 600px) {
+    body {
+        padding: 20px;
+    }
+
+    header h1 {
+        font-size: 1.8rem;
+    }
+
+    .card {
+        padding: 22px;
+    }
+}
+
+@media (min-width: 900px) {
+    header h1 {
+        font-size: 2.1rem;
+    }
+
+    header {
+        margin: 25px 0 35px 0;
+    }
+
+    .tela.ativa {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+    }
+
+    .card {
+        margin-bottom: 0;
+    }
+
+    .resultado-item {
+        font-size: 1rem;
+    }
+
+    .destaque {
+        font-size: 1.5rem;
+    }
+}

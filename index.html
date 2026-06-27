@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="style.css">
+    <title>Painel de Precificação Inteligente - Têxtil</title>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Gestor de Precificação Têxtil</h1>
+        <p style="color: var(--texto-secundario)">Simples Nacional, Marketplaces & Afiliados</p>
+    </header>
+
+    <div class="abas">
+        <button class="aba-btn ativa" onclick="mudarAba('calc-venda')">Formar Preço de Venda</button>
+        <button class="aba-btn" onclick="mudarAba('calc-reversa')">Engenharia Reversa (Concorrência)</button>
+    </div>
+
+    <!-- TELA 1: FORMAÇÃO DE PREÇO -->
+    <div id="calc-venda" class="tela ativa">
+        <div class="card">
+            <h2>Dados do Produto</h2>
+            
+            <div class="grupo-campo">
+                <label for="custo-prod">Custo de Produção / Matéria-Prima (R$)</label>
+                <input type="number" id="custo-prod" step="0.01" value="30.00">
+            </div>
+
+            <div class="grupo-campo">
+                <label for="mkt-venda">Plataforma Marketplace</label>
+                <select id="mkt-venda" onchange="gerenciarCamposDinamicos('venda')">
+                    <option value="shopee">Shopee (Regras por Faixas)</option>
+                    <option value="ml">Mercado Livre (Taxa Personalizada)</option>
+                    <option value="tiktok">TikTok Shop (6% + Taxas)</option>
+                    <option value="amazon">Amazon (Taxa Personalizada)</option>
+                </select>
+            </div>
+
+            <div class="grupo-campo" id="bloco-taxa-manual-venda" style="display:none;">
+                <label id="label-taxa-manual-venda" for="taxa-manual-venda">Porcentagem da Plataforma (%)</label>
+                <input type="number" id="taxa-manual-venda" step="0.1" value="14">
+                <div class="alerta-taxa" id="dica-mkt-venda"></div>
+            </div>
+
+            <div class="grupo-campo">
+                <label for="simples-venda">Alíquota do Simples Nacional (%)</label>
+                <input type="number" id="simples-venda" step="0.1" value="4.5">
+            </div>
+
+            <!-- NOVO CAMPO: AFILIADOS NA TELA 1 -->
+            <div class="grupo-campo">
+                <label for="afiliado-venda">Comissão do Programa de Afiliados (%)</label>
+                <input type="number" id="afiliado-venda" step="0.1" value="0" placeholder="Ex: 10 (Deixe 0 se não usar)">
+            </div>
+
+            <div class="grupo-campo">
+                <label>Como deseja aplicar o Lucro?</label>
+                <div class="grupo-radio">
+                    <label><input type="radio" name="tipo-lucro" value="porcentagem" checked onchange="ajustarPlaceholderLucro('venda')"> Porcentagem (%)</label>
+                    <label><input type="radio" name="tipo-lucro" value="fixo" onchange="ajustarPlaceholderLucro('venda')"> Valor Fixo (R$)</label>
+                </div>
+            </div>
+
+            <div class="grupo-campo">
+                <label id="label-lucro-venda" for="lucro-venda">Margem de Lucro Desejada (%)</label>
+                <input type="number" id="lucro-venda" step="0.1" value="20">
+            </div>
+
+            <button class="btn-calcular" onclick="calcularPrecoVenda()">Calcular Preço Sugerido</button>
+        </div>
+
+        <div class="card" style="background-color: #fafafa;">
+            <h2>Resultado da Precificação</h2>
+            <div class="resultado-item">
+                <span>Preço de Venda Sugerido:</span>
+                <span id="res-preco-venda" class="destaque">R$ 0,00</span>
+            </div>
+            <div class="resultado-item">
+                <span>Comissão + Taxa Mkt:</span>
+                <span id="res-mkt-venda" style="color: #dc2626; font-weight: 600;">R$ 0,00</span>
+            </div>
+            <div class="resultado-item">
+                <span>Imposto (Simples Nacional):</span>
+                <span id="res-imposto-venda" style="color: #dc2626; font-weight: 600;">R$ 0,00</span>
+            </div>
+            <div class="resultado-item">
+                <span>Comissão de Afiliado:</span>
+                <span id="res-afiliado-venda" style="color: #dc2626; font-weight: 600;">R$ 0,00</span>
+            </div>
+            <div class="resultado-item">
+                <span>Custo de Produção Original:</span>
+                <span id="res-custo-venda">R$ 0,00</span>
+            </div>
+            <div class="resultado-item" style="border-top: 2px solid var(--borda); margin-top: 10px; padding-top: 15px;">
+                <strong>Lucro Líquido no Bolso:</strong>
+                <strong id="res-lucro-real" style="color: var(--sucesso); font-size: 1.2rem;">R$ 0,00</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELA 2: ENGENHARIA REVERSA -->
+    <div id="calc-reversa" class="tela">
+        <div class="card">
+            <h2>Dados do Anúncio Espião</h2>
+            
+            <div class="grupo-campo">
+                <label for="preco-venda-cheio">Preço de Venda Cheio no Mkt (R$)</label>
+                <input type="number" id="preco-venda-cheio" step="0.01" value="120.00">
+            </div>
+
+            <div class="grupo-campo">
+                <label for="mkt-reversa">Plataforma do Anúncio</label>
+                <select id="mkt-reversa" onchange="gerenciarCamposDinamicos('reversa')">
+                    <option value="shopee">Shopee</option>
+                    <option value="ml">Mercado Livre</option>
+                    <option value="tiktok">TikTok Shop</option>
+                    <option value="amazon">Amazon</option>
+                </select>
+            </div>
+
+            <div class="grupo-campo" id="bloco-taxa-manual-reversa" style="display:none;">
+                <label id="label-taxa-manual-reversa" for="taxa-manual-reversa">Porcentagem da Plataforma (%)</label>
+                <input type="number" id="taxa-manual-reversa" step="0.1" value="14">
+                <div class="alerta-taxa" id="dica-mkt-reversa"></div>
+            </div>
+
+            <div class="grupo-campo">
+                <label for="simples-reversa">Alíquota do Simples Nacional (%)</label>
+                <input type="number" id="simples-reversa" step="0.1" value="4.5">
+            </div>
+
+            <!-- NOVO CAMPO: AFILIADOS NA TELA 2 -->
+            <div class="grupo-campo">
+                <label for="afiliado-reversa">Comissão de Afiliado Estimada (%)</label>
+                <input type="number" id="afiliado-reversa" step="0.1" value="0" placeholder="Ex: 10 (Deixe 0 se não achar)">
+            </div>
+
+            <div class="grupo-campo">
+                <label>Descontar o Lucro Pretendido por:</label>
+                <div class="grupo-radio">
+                    <label><input type="radio" name="tipo-lucro-rev" value="porcentagem" checked onchange="ajustarPlaceholderLucro('reversa')"> Porcentagem (%)</label>
+                    <label><input type="radio" name="tipo-lucro-rev" value="fixo" onchange="ajustarPlaceholderLucro('reversa')"> Valor Fixo (R$)</label>
+                </div>
+            </div>
+
+            <div class="grupo-campo">
+                <label id="label-lucro-reversa" for="lucro-reversa">Lucro que deseja embutir (%)</label>
+                <input type="number" id="lucro-reversa" step="0.1" value="20">
+            </div>
+
+            <button class="btn-calcular" onclick="calcularEngenhariaReversa()">Descobrir Valor de Compra</button>
+        </div>
+
+        <div class="card" style="background-color: #fafafa;">
+            <h2>Alvo de Custo Máximo</h2>
+            <div class="resultado-item">
+                <span>Preço Analisado:</span>
+                <span id="res-preco-venda-rev">R$ 0,00</span>
+            </div>
+            <div class="resultado-item">
+                <span>(-) Tarifa da Plataforma:</span>
+                <span id="res-mkt-rev" style="color: #dc2626;">R$ 0,00</span>
+            </div>
+            <div class="resultado-item">
+                <span>(-) Simples Nacional:</span>
+                <span id="res-imposto-rev" style="color: #dc2626;">R$ 0,00</span>
+            </div>
+            <div class="resultado-item">
+                <span>(-) Comissão Afiliado:</span>
+                <span id="res-afiliado-rev" style="color: #dc2626;">R$ 0,00</span>
+            </div>
+            <div class="resultado-item">
+                <span>(-) Lucro Deduzido:</span>
+                <span id="res-lucro-rev" style="color: #dc2626;">R$ 0,00</span>
+            </div>
+            <div class="resultado-item" style="border-top: 2px solid var(--borda); margin-top: 10px; padding-top: 15px;">
+                <strong>Custo Máximo Permitido:</strong>
+                <strong id="res-custo-maximo" class="destaque" style="color: #2563eb;">R$ 0,00</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
